@@ -7,6 +7,12 @@ import { CreateTaskDto } from './dto/create-task.dto';
 export class TasksService {
   private tasks: Task[] = [];
 
+  getTaskById(id: string): Task {
+    return this.tasks.find((task) => {
+      return task.id === id;
+    });
+  }
+
   getAllTasks(): Task[] {
     return this.tasks;
   }
@@ -24,6 +30,10 @@ export class TasksService {
     this.tasks.push(task);
 
     return task;
+  }
+
+  deleteTask(id: string): void {
+    this.tasks = this.tasks.filter((task) => task.id !== id); //Filter & keeps tasks not identical to id
   }
 }
 
