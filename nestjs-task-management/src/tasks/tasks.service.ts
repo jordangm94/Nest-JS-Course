@@ -9,12 +9,7 @@ export class TasksService {
   private tasks: Task[] = [];
 
   getTaskById(id: string): Task {
-    //try to get task
-    //if not found, throw an error 404
-    //otherwise, return the found task
-    const found = this.tasks.find((task) => {
-      task.id === id;
-    });
+    const found = this.tasks.find((task) => task.id === id);
 
     if (!found) {
       throw new NotFoundException(`Task with id '${id}' not found`); //nestJS tool to return an error 404 if not found
