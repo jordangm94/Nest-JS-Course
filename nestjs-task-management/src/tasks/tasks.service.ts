@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Task, TaskStatus } from './tasks.model';
 import { v4 as uuid } from 'uuid';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -9,9 +9,18 @@ export class TasksService {
   private tasks: Task[] = [];
 
   getTaskById(id: string): Task {
-    return this.tasks.find((task) => {
-      return task.id === id;
+    //try to get task
+    //if not found, throw an error 404
+    //otherwise, return the found task
+    const found = this.tasks.find((task) => {
+      task.id === id;
     });
+
+    if (!found) {
+      throw new NotFoundException(`Task with id '${id}' not found`); //nestJS tool to return an error 404 if not found
+    }
+
+    return found;
   }
 
   getAllTasks(): Task[] {
@@ -72,3 +81,7 @@ export class TasksService {
 //Good practice to set this as private so it cannot be accessed by other pieces of your app and accidentally mutated.
 
 //So above the tasks is set as private but this method being public allows for the tasks to be accessed. Notice how we are specifiying a type for Task (from our model)
+
+//////
+
+//Notice how we didn't have to change anything in the controller, only this service, when it came to not found task id error handle. This is because the controller is the entry point to the application and the service is where the business logic is. So we can handle the error in the service and the controller will just return the result.
