@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TasksModule } from './tasks/tasks.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 //App module is root entry point of application and we are importing the task module within this root.
 
@@ -10,6 +11,18 @@ import { TasksModule } from './tasks/tasks.module';
 ////////////Questions but what is a MODULE....
 
 @Module({
-  imports: [TasksModule],
+  imports: [
+    TasksModule,
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5435,
+      username: 'postgres',
+      password: 'postgres',
+      database: 'task-management',
+      autoLoadEntities: true, //this will load all entities in the app.module.ts
+      synchronize: true, //Keeps DB schema in sync | This will sync the entities with the database
+    }),
+  ],
 })
 export class AppModule {}
