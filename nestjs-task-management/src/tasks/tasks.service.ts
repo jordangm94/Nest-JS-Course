@@ -2,16 +2,28 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { TaskStatus } from './tasks-status.enum';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
+import { TasksRespository } from './tasks.repository';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Task } from './task.entity';
 
 @Injectable()
 export class TasksService {
-  // getTaskById(id: string): Task {
-  //   const found = this.tasks.find((task) => task.id === id);
-  //   if (!found) {
-  //     throw new NotFoundException(`Task with id '${id}' not found`); //nestJS tool to return an error 404 if not found
-  //   }
-  //   return found;
-  // }
+  constructor(
+    @InjectRepository(TasksRespository) //This allows us to inject the database repository into the service
+    private tasksRepository: TasksRespository,
+  ) {}
+
+  //Below this is saying this method will return a promise of type Task. Any asynchornous methods return a promise!
+  async getTaskById(id: string): Promise<Task> {
+    const found = await this.tasksRepository.findOne(id);
+
+    if (!found) {
+      throw new NotFoundException(`Task with id '${id}' not found`); //nestJS tool to return an error 404 if not found
+    }
+
+    return found;
+  }
+
   // getAllTasks(): Task[] {
   //   return this.tasks;
   // }

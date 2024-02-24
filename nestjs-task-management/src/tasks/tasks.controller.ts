@@ -13,6 +13,7 @@ import { TaskStatus } from './tasks-status.enum';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
+import { Task } from './task.entity';
 
 @Controller('tasks')
 export class TasksController {
@@ -31,10 +32,10 @@ export class TasksController {
   //   }
   // }
 
-  // @Get('/:id') //Colon tells nestJs id will be path parameter, extracted from parameter passed to handler
-  // getTaskById(@Param('id') id: string): Task {
-  //   return this.tasksService.getTaskById(id);
-  // }
+  @Get('/:id') //Colon tells nestJs id will be path parameter, extracted from parameter passed to handler
+  getTaskById(@Param('id') id: string): Promise<Task> {
+    return this.tasksService.getTaskById(id);
+  }
 
   // @Post()
   // createTask(@Body() CreateTaskDto: CreateTaskDto): Task {
