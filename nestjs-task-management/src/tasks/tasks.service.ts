@@ -13,7 +13,7 @@ export class TasksService {
     private tasksRepository: TasksRespository,
   ) {}
 
-  //Below this is saying this method will return a promise of type Task. Any asynchornous methods return a promise!
+  //Return a promise of type Task. Any asynchornous methods return a promise!
   async getTaskById(id: string): Promise<Task> {
     const found = await this.tasksRepository.findOne(id);
 
@@ -22,6 +22,13 @@ export class TasksService {
     }
 
     return found;
+  }
+
+  async deleteTask(id: string): Promise<void> {
+    const result = await this.tasksRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Task with id '${id}' not found`);
+    }
   }
 
   // getAllTasks(): Task[] {
